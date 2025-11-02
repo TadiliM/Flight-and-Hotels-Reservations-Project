@@ -1,0 +1,50 @@
+.flight-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 15px 0;
+  background-color: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.flight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.flight-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #0077cc;
+}
+
+.flight-section {
+  margin-top: 10px;
+}
+
+.flight-section h4 {
+  margin-bottom: 4px;
+  color: #555;
+}
+
+.flight-section p {
+  margin: 2px 0;
+  font-size: 0.95rem;
+  color: #333;
+}
