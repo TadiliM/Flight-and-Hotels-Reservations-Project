@@ -1,29 +1,63 @@
 import React from "react";
-import './Flight.css'
+import "./Flight.css";
 
-export default function Flight({ info }) {
+export default function Flight({ info, airLinesNames }) {
   const { price, validatingAirlineCodes, itineraries } = info;
   const { total, currency } = price;
   const depart = itineraries[0];
-  let arriv = "";
-  let text = "";
+  let retour = "";
   if (itineraries.length >= 1) {
-    arriv = itineraries[1];
-    text = (
-      <div>
-        <h3>
-          return from {arriv.segments[0].departure.iataCode} to{" "}
-          {arriv.segments[arriv.segments.length - 1].arrival.iataCode}
-        </h3>
-        <p>Duration : {arriv.duration}</p>
-      </div>
-    );
+    retour = itineraries[1];
+  }
+
+  const departDate1 = new Date(depart.segments[0].departure.at).toLocaleString("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const departDate2 = new Date(depart.segments[depart.segments.length - 1].arrival.at).toLocaleString("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  let arrivalDate1 = "";
+  let arrivalDate2 = "";
+  if (retour) {
+    arrivalDate1 = new Date(retour.segments[0].departure.at).toLocaleString("fr-FR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    arrivalDate2 = new Date(retour.segments[retour.segments.length - 1].arrival.at).toLocaleString("fr-FR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  }
+
+  function formatDuration(duration) {
+    const match = duration.match(/PT(\d+H)?(\d+M)?/);
+    const hours = match[1] ? match[1].replace("H", "") : "0";
+    const minutes = match[2] ? match[2].replace("M", "") : "0";
+    return `${hours}h ${minutes}min`;
   }
 
   return (
     <div className="flight-card">
       <div className="flight-header">
-        <h3>{validatingAirlineCodes.join(", ")}</h3>
+        <h3>{validatingAirlineCodes.map(code => airLinesNames[code] || code).join(", ")}</h3>
         <span className="price">
           {total} {currency}
         </span>
@@ -36,24 +70,24 @@ export default function Flight({ info }) {
           {depart.segments[depart.segments.length - 1].arrival.iataCode}
         </p>
         <p>
-          🕒 {depart.segments[0].departure.at} →{" "}
-          {depart.segments[depart.segments.length - 1].arrival.at}
+          🕒 {departDate1} →{" "}
+          {departDate2}
         </p>
-        <p>⏱️ Durée : {depart.duration}</p>
+        <p>⏱️ Durée : {formatDuration(depart.duration)}</p>
       </div>
 
-      {arriv && (
+      {retour && (
         <div className="flight-section">
           <h4>Retour</h4>
           <p>
-            ✈️ {arriv.segments[0].departure.iataCode} →{" "}
-            {arriv.segments[arriv.segments.length - 1].arrival.iataCode}
+            ✈️ {retour.segments[0].departure.iataCode} →{" "}
+            {retour.segments[retour.segments.length - 1].arrival.iataCode}
           </p>
           <p>
-            🕒 {arriv.segments[0].departure.at} →{" "}
-            {arriv.segments[arriv.segments.length - 1].arrival.at}
+            🕒 {arrivalDate1} →{" "}
+            {arrivalDate2}
           </p>
-          <p>⏱️ Durée : {arriv.duration}</p>
+          <p>⏱️ Durée : {formatDuration(retour.duration)}</p>
         </div>
       )}
     </div>

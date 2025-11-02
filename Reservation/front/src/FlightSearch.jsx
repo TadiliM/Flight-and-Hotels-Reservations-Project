@@ -3,7 +3,7 @@ import iataCodes from "./iataCodes";
 import Select from 'react-select';
 import './FlightSearch.css'
 
-export default function FlightSearch({ onChangeData }) {
+export default function FlightSearch({ onChangeData, onChangeAirLinesNames }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [depart, setDepart] = useState("");
@@ -26,6 +26,8 @@ export default function FlightSearch({ onChangeData }) {
       console.log("Raw response:", data);
       data = await data.json();
       console.log("Parsed response:", data);
+      const airLinesNames = data.dictionaries.carriers;
+      onChangeAirLinesNames(airLinesNames);
       data = data.data;
       console.log("Final data:", data);
       alert(JSON.stringify(data, null, 2));
@@ -35,8 +37,6 @@ export default function FlightSearch({ onChangeData }) {
       return;
     }
   };
-
-  const options = iataCodes.map(a => ({ value: a, label: a }));
 
   return (
     <>
