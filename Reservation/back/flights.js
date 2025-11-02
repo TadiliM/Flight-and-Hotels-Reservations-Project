@@ -35,7 +35,8 @@ route.get("", async (req, res) => {
     adults,
   } = req.query;
 
-  const endpoint1 = `${hostname}/v2/shopping/flight-offers?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&returnDate=${returnDate}&adults=${adults}`;
+  let endpoint1 = `${hostname}/v2/shopping/flight-offers?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&adults=${adults}`;
+  endpoint1 += returnDate ? `&returnDate=${returnDate}` : "";
   const options = {
     method: "GET",
     headers: {

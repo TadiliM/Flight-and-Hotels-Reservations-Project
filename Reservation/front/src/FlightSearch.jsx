@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import iataCodes from "./iataCodes";
-import Select from 'react-select';
-import './FlightSearch.css'
+import Select from "react-select";
+import "./FlightSearch.css";
 
-export default function FlightSearch({ onChangeData, onChangeAirLinesNames }) {
+export default function FlightSearch({ onChangeData, onChangeAirLinesNames, setIsLoading }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [depart, setDepart] = useState("");
@@ -20,18 +20,24 @@ export default function FlightSearch({ onChangeData, onChangeAirLinesNames }) {
         arrival,
         adults,
       });
-      let data = await fetch(
-        `http://localhost:3000/flights?originLocationCode=${origin}&destinationLocationCode=${destination}&departureDate=${depart}&returnDate=${arrival}&adults=${adults}`
-      );
-      console.log("Raw response:", data);
+      setIsLoading(true);
+      //onChangeData(["Chargement"]);
+
+      let endpoint = `http://localhost:3000/flights?originLocationCode=${origin}&destinationLocationCode=${destination}&departureDate=${depart}&adults=${adults}`;
+      endpoint += arrival !== "" ? `&returnDate=${arrival}` : "";
+
+      let data = await fetch(endpoint);
+
       data = await data.json();
-      console.log("Parsed response:", data);
-      const airLinesNames = data.dictionaries.carriers;
+
+      const airLinesNames = data?.dictionaries?.carriers;
       onChangeAirLinesNames(airLinesNames);
-      data = data.data;
+      data =  Array.isArray(data.data) ? data.data : [];      
       console.log("Final data:", data);
-      alert(JSON.stringify(data, null, 2));
+
+
       onChangeData(data);
+      setIsLoading(false)
     } catch (error) {
       console.error("Error in searching flights", error);
       return;

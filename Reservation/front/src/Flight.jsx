@@ -54,6 +54,21 @@ export default function Flight({ info, airLinesNames }) {
     return `${hours}h ${minutes}min`;
   }
 
+  async function handleClickBook() {
+    const data = { hotel: "TestHotel", flight: "TestFlight" };
+    const endpoint = `http://localhost:3000/reservations`;
+    const options = {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    }; 
+    try {
+      const response = await fetch(endpoint, options);
+    } catch (error) {
+      console.error("Error in booking", error)
+    }
+  }
+
   return (
     <div className="flight-card">
       <div className="flight-header">
@@ -61,6 +76,7 @@ export default function Flight({ info, airLinesNames }) {
         <span className="price">
           {total} {currency}
         </span>
+      <button onClick={handleClickBook}>Reserver</button>
       </div>
 
       <div className="flight-section">
