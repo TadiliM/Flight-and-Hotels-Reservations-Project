@@ -15,8 +15,9 @@ form {
 select,
 input {
   font-size: 1rem;
+  color: #222;
   padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid #0b0606;
   border-radius: 8px;
   background-color: white;
   width: 180px;

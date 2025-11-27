@@ -10,7 +10,7 @@ export default function Flight({ info, airLinesNames }) {
     retour = itineraries[1];
   }
 
-  const departDate1 = new Date(depart.segments[0].departure.at).toLocaleString("fr-FR", {
+  const departDate1 = new Date(depart.segments[0].departure.at).toLocaleString("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -18,7 +18,7 @@ export default function Flight({ info, airLinesNames }) {
     minute: "2-digit",
   });
 
-  const departDate2 = new Date(depart.segments[depart.segments.length - 1].arrival.at).toLocaleString("fr-FR", {
+  const departDate2 = new Date(depart.segments[depart.segments.length - 1].arrival.at).toLocaleString("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -29,7 +29,7 @@ export default function Flight({ info, airLinesNames }) {
   let arrivalDate1 = "";
   let arrivalDate2 = "";
   if (retour) {
-    arrivalDate1 = new Date(retour.segments[0].departure.at).toLocaleString("fr-FR", {
+    arrivalDate1 = new Date(retour.segments[0].departure.at).toLocaleString("en-US", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -37,7 +37,7 @@ export default function Flight({ info, airLinesNames }) {
       minute: "2-digit",
     });
 
-    arrivalDate2 = new Date(retour.segments[retour.segments.length - 1].arrival.at).toLocaleString("fr-FR", {
+    arrivalDate2 = new Date(retour.segments[retour.segments.length - 1].arrival.at).toLocaleString("en-US", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -55,7 +55,9 @@ export default function Flight({ info, airLinesNames }) {
   }
 
   async function handleClickBook() {
-    const data = { hotel: "TestHotel", flight: "TestFlight" };
+    const data = {
+      flight: `${depart.segments[0].departure.iataCode} → ${depart.segments[depart.segments.length - 1].arrival.iataCode} | ${departDate1} → ${departDate2} | ${validatingAirlineCodes.map(code => airLinesNames[code] || code).join(", ")} | ${total} ${currency}`
+    };
     const endpoint = `http://localhost:3000/reservations`;
     const options = {
       method: "POST",
@@ -64,6 +66,7 @@ export default function Flight({ info, airLinesNames }) {
     }; 
     try {
       const response = await fetch(endpoint, options);
+      alert("Registration reserved ! Good trip ! See details in Reservations.")
     } catch (error) {
       console.error("Error in booking", error)
     }
@@ -76,11 +79,11 @@ export default function Flight({ info, airLinesNames }) {
         <span className="price">
           {total} {currency}
         </span>
-      <button onClick={handleClickBook}>Reserver</button>
+      <button onClick={handleClickBook}>Reserve</button>
       </div>
 
       <div className="flight-section">
-        <h4>Aller</h4>
+        <h4>Depart</h4>
         <p>
           ✈️ {depart.segments[0].departure.iataCode} →{" "}
           {depart.segments[depart.segments.length - 1].arrival.iataCode}
@@ -89,12 +92,12 @@ export default function Flight({ info, airLinesNames }) {
           🕒 {departDate1} →{" "}
           {departDate2}
         </p>
-        <p>⏱️ Durée : {formatDuration(depart.duration)}</p>
+        <p>⏱️ Duration : {formatDuration(depart.duration)}</p>
       </div>
 
       {retour && (
         <div className="flight-section">
-          <h4>Retour</h4>
+          <h4>Return</h4>
           <p>
             ✈️ {retour.segments[0].departure.iataCode} →{" "}
             {retour.segments[retour.segments.length - 1].arrival.iataCode}
@@ -103,7 +106,7 @@ export default function Flight({ info, airLinesNames }) {
             🕒 {arrivalDate1} →{" "}
             {arrivalDate2}
           </p>
-          <p>⏱️ Durée : {formatDuration(retour.duration)}</p>
+          <p>⏱️ Duration : {formatDuration(retour.duration)}</p>
         </div>
       )}
     </div>

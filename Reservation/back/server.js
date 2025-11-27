@@ -17,8 +17,6 @@ app.use(express.json());
 
 
 
-app.use("/hotels", routeHotels);
-
 app.use("/flights", routeFlights);
 
 app.use("/reservations", routeReservations);

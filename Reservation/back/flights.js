@@ -9,22 +9,22 @@ const hostname = "https://test.api.amadeus.com";
 
 // Get an access_token
 async function getAccessToken() {
-  const response = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "client_credentials",
-      client_id: process.env.API_KEY,
-      client_secret: process.env.API_SECRET,
-    }),
-  });
+  const response = await fetch(
+    "https://test.api.amadeus.com/v1/security/oauth2/token",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "client_credentials",
+        client_id: process.env.API_KEY,
+        client_secret: process.env.API_SECRET,
+      }),
+    }
+  );
 
   const data = await response.json();
   return data.access_token;
 }
-
-
-const token = await getAccessToken();
 
 route.get("", async (req, res) => {
   const {
@@ -37,18 +37,21 @@ route.get("", async (req, res) => {
 
   let endpoint1 = `${hostname}/v2/shopping/flight-offers?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&adults=${adults}`;
   endpoint1 += returnDate ? `&returnDate=${returnDate}` : "";
-  const options = {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  };
 
   try {
+    const token = await getAccessToken();
+
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
     let data = await fetch(endpoint1, options);
     data = await data.json();
-    console.log("api amadeus : ",data);
+    console.log("api amadeus : ", data);
     res.end(JSON.stringify(data));
   } catch (e) {
     res.statusCode = 400;

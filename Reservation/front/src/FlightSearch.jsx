@@ -52,8 +52,8 @@ export default function FlightSearch({ onChangeData, onChangeAirLinesNames, setI
           onChange={(e) => setOrigin(e.target.value)}
           label={"Origin (Exemple : PAR for Paris)"}
         >
-          {iataCodes.map((code) => (
-            <option>{code}</option>
+          {iataCodes.map((code,id) => (
+            <option key={id}>{code}</option>
           ))}
         </select>
         <select
@@ -61,8 +61,8 @@ export default function FlightSearch({ onChangeData, onChangeAirLinesNames, setI
           onChange={(e) => setDestination(e.target.value)}
           label={"Destination (Exemple : RAK for Marrakech"}
         >
-          {iataCodes.map((code) => (
-            <option>{code}</option>
+          {iataCodes.map((code,id) => (
+            <option key={id}>{code}</option>
           ))}
         </select>
         <input

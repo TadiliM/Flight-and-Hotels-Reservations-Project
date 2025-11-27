@@ -33,13 +33,13 @@ route.get("", async (req, res) => {
 
 route.post("", async (req, res) => {
   try {
-    const { hotel, flight } = req.body;
+    const { flight } = req.body;
     const rows = await pool.query(
-      "INSERT INTO reservation (hotel, flight) VALUES ( $1, $2)",
-      [hotel, flight]
+      "INSERT INTO reservation (flight) VALUES ($1)",
+      [flight]
     );
     console.log("Registration added\n");
-    res.status(201).send({ hotel, flight });
+    res.status(201).send({flight });
   } catch (error) {
     console.error("error in add registration", error);
     res.status(500).json({ error: "Error adding reservation" });
